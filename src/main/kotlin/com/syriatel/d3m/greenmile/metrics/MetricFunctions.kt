@@ -8,7 +8,7 @@ fun <T : Comparable<T>> max(latestMax: T?, action: Action, criteria: (Action) ->
         if (field(action) != null)
             if (latestMax == null)
                 return field(action)
-            else if (field(action) ?: 0 > latestMax)
+            else if (field(action)!! > latestMax)
                 return field(action)
 
     return latestMax
