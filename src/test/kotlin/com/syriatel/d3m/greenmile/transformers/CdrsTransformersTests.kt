@@ -2,6 +2,7 @@ package com.syriatel.d3m.greenmile.transformers
 
 import com.syriatel.d3m.greenmile.domain.Action
 import com.syriatel.d3m.greenmile.domain.ActionType
+import com.syriatel.d3m.greenmile.domain.InvalidCdrException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -68,6 +69,20 @@ class RecTransformerTests {
             Assertions.assertEquals(expected, it)
         }
     }
+
+    @Test
+    fun `should throw InvalidCdrException`(){
+        val fields = arrayOf("", "0933886839", "020202020202", "030303", "not used",
+                "20200101121011", "0933886839", "46", "60", "090909090909", "transactionType", "11111111", "1000.0",
+                "13.0", "0.0", "0.0", "1", "0993995060", "181818", "1919191919", "2020202020", "21212121", "222222",
+                "23232323", "24242424", "25.0", "262626", "2727272727", "2828282828", "29292929", "3030303030",
+                "31313131", "32323232", "3333333", "34343434", "35353535")
+
+        Assertions.assertThrows(InvalidCdrException::class.java){
+            processRec(fields)
+        }
+    }
+
 }
 
 @DisplayName("SMS Deserializer Tests")
@@ -129,6 +144,18 @@ class SmsTransformerTests {
             Assertions.assertEquals(expected, it)
         }
 
+    }
+    @Test
+    fun `should throw InvalidCdrException`(){
+        val fields = arrayOf("", "0933886839", "020202020202", "030303", "not used",
+                "20200101121011", "0933886839", "46", "60", "090909090909", "transactionType", "11111111", "1000.0",
+                "13.0", "0.0", "0.0", "1", "0993995060", "181818", "1919191919", "2020202020", "21212121", "222222",
+                "23232323", "24242424", "25.0", "262626", "2727272727", "2828282828", "29292929", "3030303030",
+                "31313131", "32323232", "3333333", "34343434", "35353535")
+
+        Assertions.assertThrows(InvalidCdrException::class.java){
+            processSms(fields)
+        }
     }
 }
 
@@ -194,6 +221,18 @@ class DataTransformerTests {
             Assertions.assertEquals(expected, it)
         }
 
+    }
+    @Test
+    fun `should throw InvalidCdrException`(){
+        val fields = arrayOf("", "", "020202020202", "030303", "not used",
+                "20200101121011", "0933886839", "46", "60", "090909090909", "transactionType", "11111111", "1000.0",
+                "13.0", "0.0", "0.0", "1", "0993995060", "181818", "1919191919", "2020202020", "21212121", "222222",
+                "23232323", "24242424", "25.0", "262626", "2727272727", "2828282828", "29292929", "3030303030",
+                "31313131", "32323232", "3333333", "34343434", "35353535")
+
+        Assertions.assertThrows(InvalidCdrException::class.java){
+            processData(fields)
+        }
     }
 }
 

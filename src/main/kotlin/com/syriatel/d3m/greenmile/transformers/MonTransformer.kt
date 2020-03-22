@@ -2,6 +2,7 @@ package com.syriatel.d3m.greenmile.transformers
 
 import com.syriatel.d3m.greenmile.domain.Action
 import com.syriatel.d3m.greenmile.domain.ActionType
+import com.syriatel.d3m.greenmile.domain.InvalidCdrException
 import com.syriatel.d3m.greenmile.utils.dateValue
 import com.syriatel.d3m.greenmile.utils.indexArray
 
@@ -28,33 +29,37 @@ import com.syriatel.d3m.greenmile.utils.indexArray
  * CycleLength414 -> cycleLength
  */
 val processMon: (Array<String>) -> Action = {
-    Action(
-            timeStamp = dateValue(it[indexArray[0]]),
-            performedBy = it[indexArray[1]],
-            type = ActionType.ActivateBundle,
-            offer = it[indexArray[2]],
-            cost = (it[indexArray[13]].toDoubleOrNull() ?: 0.0) + (it[indexArray[14]].toDoubleOrNull() ?: 0.0)
-                    + (it[indexArray[15]].toDoubleOrNull() ?: 0.0),
+    try {
+        Action(
+                timeStamp = dateValue(it[indexArray[0]]),
+                performedBy = it[indexArray[1]],
+                type = ActionType.ActivateBundle,
+                offer = it[indexArray[2]],
+                cost = (it[indexArray[13]].toDoubleOrNull() ?: 0.0) + (it[indexArray[14]].toDoubleOrNull() ?: 0.0)
+                        + (it[indexArray[15]].toDoubleOrNull() ?: 0.0),
 
-            map = mutableMapOf(
-                    "startedAt" to dateValue(it[indexArray[0]]),
-                    "finishedAt" to dateValue(it[indexArray[4]]),
-                    "transactionType" to it[indexArray[5]],
-                    "balance" to it[indexArray[6]].toDoubleOrNull(),
-                    "debitFromPrepaid" to it[indexArray[7]].toDoubleOrNull(),
-                    "debitFromPostpaid" to it[indexArray[8]].toDoubleOrNull(),
-                    "debitFromCredit" to it[indexArray[9]].toDoubleOrNull(),
-                    "bfcOperation" to it[indexArray[10]],
-                    "simType" to it[indexArray[11]],
-                    "payType" to it[indexArray[12]],
-                    "imsi" to it[indexArray[13]],
-                    "offeringID" to it[indexArray[14]],
-                    "createdAt" to it[indexArray[15]],
-                    "cycleBeginTime" to dateValue(it[indexArray[16]]),
-                    "cycleEndTime" to dateValue(it[indexArray[17]]),
-                    "cycleLength" to it[indexArray[18]].toLongOrNull()
-            )
-    )
+                map = mutableMapOf(
+                        "startedAt" to dateValue(it[indexArray[0]]),
+                        "finishedAt" to dateValue(it[indexArray[4]]),
+                        "transactionType" to it[indexArray[5]],
+                        "balance" to it[indexArray[6]].toDoubleOrNull(),
+                        "debitFromPrepaid" to it[indexArray[7]].toDoubleOrNull(),
+                        "debitFromPostpaid" to it[indexArray[8]].toDoubleOrNull(),
+                        "debitFromCredit" to it[indexArray[9]].toDoubleOrNull(),
+                        "bfcOperation" to it[indexArray[10]],
+                        "simType" to it[indexArray[11]],
+                        "payType" to it[indexArray[12]],
+                        "imsi" to it[indexArray[13]],
+                        "offeringID" to it[indexArray[14]],
+                        "createdAt" to it[indexArray[15]],
+                        "cycleBeginTime" to dateValue(it[indexArray[16]]),
+                        "cycleEndTime" to dateValue(it[indexArray[17]]),
+                        "cycleLength" to it[indexArray[18]].toLongOrNull()
+                )
+        )
+    } catch (e: Exception) {
+        throw InvalidCdrException("Missing cdr properties!!")
+    }
 
 }
 
